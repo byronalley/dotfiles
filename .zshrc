@@ -10,7 +10,11 @@ autoload -U compinit
 compinit
 
 # Functions
-# setprompt stolen from http://aperiodic.net/phil/prompt/
+
+############################################################
+# Set different prompts for different systems
+# Setprompt inspired by http://aperiodic.net/phil/prompt/
+############################################################
 setprompt () {
     ###
     # Need this so the prompt will work.
@@ -30,11 +34,20 @@ setprompt () {
     done
     PR_NO_COLOUR="%{$terminfo[sgr0]%}"
 
-    ###
-    # Finally, the prompt.
-		# For the MACBOOK:
-    PROMPT='[%*] $PR_SHIFT_IN$PR_BLUE$PR_SHIFT_OUT%n@%m$PR_NO_COLOUR
+		OSNAME=`uname -s`
+
+		if [[ "$OSNAME" == "Darwin" ]]; then
+			PROMPT='[%*] $PR_SHIFT_IN$PR_BLUE$PR_SHIFT_OUT%n@%m$PR_NO_COLOUR
 %~%# '
+		elif [[ "$OSNAME" == "Linux" ]]; then
+			if lsb_release -i | grep -q Debian ; then
+				PROMPT='[%*] $PR_SHIFT_IN$PR_CYAN$PR_SHIFT_OUT%n@%m$PR_NO_COLOUR
+%~%# '
+			else
+				PROMPT='[%*] $PR_SHIFT_IN$PR_GREEN$PR_SHIFT_OUT%n@%m$PR_NO_COLOUR
+%~%# '
+			fi
+		fi
 
 }
 
@@ -57,7 +70,7 @@ alias vi=vim
 
 export HISTFILE=~/.zhistory
 export SAVEHIST=9999999
-export PATH=/opt/local/bin:$PATH:/usr/local/mysql/bin:$HOME/bin
+export PATH=/opt/local/bin:/usr/lib/ruby/gems/1.8/bin:$PATH:/usr/local/mysql/bin:$HOME/bin
 
 ## zsh options
 setopt inc_append_history
@@ -95,8 +108,8 @@ export HOSTNAME=`/bin/hostname`
 export MAIL=/var/spool/mail/$USER
 export IPOD_MOUNTPOINT=/media/IPOD
 export PERL5LIB=~/lib/
-export VISUAL=/opt/local/bin/vim
-export EDITOR=/opt/local/bin/vim
+export VISUAL=`which vim`
+export EDITOR=`which vim`
 
 # Looks like this isn't necessary after declaring $PATH earlier:
 # path=(/opt/local/bin/ $path /usr/local/mysql/bin $HOME/bin)
