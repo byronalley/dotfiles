@@ -39,6 +39,9 @@ setprompt () {
 		if [[ "$OSNAME" == "Darwin" ]]; then
 			PROMPT='[%*] $PR_SHIFT_IN$PR_BLUE$PR_SHIFT_OUT%n@%m$PR_NO_COLOUR
 %~%# '
+		elif [[ "$OSNAME" =~ "BSD" ]]; then
+			PROMPT='[%*] $PR_SHIFT_IN$PR_RED$PR_SHIFT_OUT%n@%m$PR_NO_COLOUR
+%~%# '
 		elif [[ "$OSNAME" == "Linux" ]]; then
 			if lsb_release -i | grep -q Debian ; then
 				PROMPT='[%*] $PR_SHIFT_IN$PR_CYAN$PR_SHIFT_OUT%n@%m$PR_NO_COLOUR
