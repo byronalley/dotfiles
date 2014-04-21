@@ -15,6 +15,7 @@ compinit
 # Set different prompts for different systems
 # Setprompt inspired by http://aperiodic.net/phil/prompt/
 ############################################################
+
 setprompt () {
     ###
     # Need this so the prompt will work.
@@ -29,6 +30,7 @@ setprompt () {
     fi
     for color in RED GREEN YELLOW BLUE MAGENTA CYAN WHITE; do
 	eval PR_$color='%{$terminfo[bold]$fg[${(L)color}]%}'
+	eval PRBG_$color='%{$terminfo[bold]$bg[${(L)color}]%}'
 	eval PR_LIGHT_$color='%{$fg[${(L)color}]%}'
 	(( count = $count + 1 ))
     done
@@ -43,7 +45,11 @@ setprompt () {
 			PROMPT='[%*] $PR_SHIFT_IN$PR_RED$PR_SHIFT_OUT%n@%m$PR_NO_COLOUR
 %~%# '
 		elif [[ "$OSNAME" == "Linux" ]]; then
-			if lsb_release -i | grep -q Debian ; then
+			RELEASE=`lsb_release -i`
+			if [[ "$RELEASE" =~ "Peppermint" ]]; then
+				PROMPT='[%*] $PR_SHIFT_IN$PR_WHITE$PRBG_RED$PR_SHIFT_OUT%n@%m$PR_NO_COLOUR
+%~%# '
+			elif [[ "$RELEASE" =~ "Debian" ]]; then
 				PROMPT='[%*] $PR_SHIFT_IN$PR_CYAN$PR_SHIFT_OUT%n@%m$PR_NO_COLOUR
 %~%# '
 			else
@@ -53,7 +59,6 @@ setprompt () {
 		fi
 
 }
-
 # Set up colors for ls: MAC OS X Specific Stuff
 export CLICOLORS=1
 # Enable ls colors
